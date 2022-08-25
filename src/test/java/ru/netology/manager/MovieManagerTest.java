@@ -1,12 +1,19 @@
 package ru.netology.manager;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import ru.netology.domain.Movie;
 import ru.netology.manager.MovieManager;
+import ru.netology.repistory.AfishaRepository;
+
+import static org.mockito.Mockito.*;
 
 public class MovieManagerTest {
-    MovieManager manager = new MovieManager();
+    AfishaRepository repo = Mockito.mock(AfishaRepository.class);
+    MovieManager manager = new MovieManager(repo);
+
     private Movie first = new Movie(1, "Bladshot", "https//", "action");
     private Movie second = new Movie(2, "Vpered", "https//", "cartoon");
     private Movie third = new Movie(3, "HotelBelgrad", "https//", "comedy");
@@ -18,28 +25,8 @@ public class MovieManagerTest {
     private Movie ninth = new Movie(9, "Terminal", "https//", "drama");
     private Movie tenth = new Movie(10, "Biven'", "https//", "triller");
 
-    @Test
-    public void shouldAddMovies () {
-        MovieManager manager = new MovieManager();
-        manager.add(first);
-        manager.add(second);
-        manager.add(third);
-        manager.add(fourth);
-        manager.add(fifth);
-        Movie[] expected = {first, second, third, fourth, fifth};
-        Movie[] actual = manager.getAll();
-        Assertions.assertArrayEquals(expected,actual);
-    }
-    @Test
-    public void shouldGetEmpty () {
-        MovieManager manager = new MovieManager();
-        Movie[] expected = {};
-        Movie[] actual = manager.getAll();
-        Assertions.assertArrayEquals(expected, actual);
-    }
-    @Test
-    public void shouldGetLastMovie(){
-        MovieManager manager = new MovieManager(5);
+    @BeforeEach
+    public void setUp() {
         manager.add(first);
         manager.add(second);
         manager.add(third);
@@ -50,15 +37,25 @@ public class MovieManagerTest {
         manager.add(eighth);
         manager.add(ninth);
         manager.add(tenth);
-        Movie[] expected = {tenth, ninth, eighth, seventh, sixth};
-        Movie[] actual = manager.getLastMovie();
-        Assertions.assertArrayEquals(expected,actual);
     }
+
     @Test
-    public void shouldMovieaboveMovieQty(){
-        MovieManager manager = new MovieManager(17);
-        Movie[] actual = manager.getLastMovie();
-        Movie[] expected = new Movie[]{};
+    public void shouldReversedAllMovies() {
+        Movie[] items = {first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth};
+        doReturn(items).when(repo).findAll();
+
+        Movie[] expected = {first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth};
+        Movie[] actual = manager.findAll();
+        Assertions.assertArrayEquals(expected, actual);
+    }
+
+    @Test
+    public void shouldReversedFindLast() {
+        Movie[] items = {first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth};
+        doReturn(items).when(repo).findAll();
+
+        Movie[] expected = {tenth, ninth, eighth, seventh, sixth, fifth, fourth, third, second, first};
+        Movie[] actual = manager.getMovies();
         Assertions.assertArrayEquals(expected, actual);
     }
 }
