@@ -1,44 +1,39 @@
 package ru.netology.manager;
 
 import ru.netology.domain.Movie;
+import ru.netology.repistory.AfishaRepository;
 
 public class MovieManager {
-    private Movie[] items = new Movie[0];
-    private int movieQty;
+    private AfishaRepository repo;
+    private int movieQty = 10;
+
+
+    public MovieManager(AfishaRepository repo) {
+        this.repo = repo;
+    }
+
+    public MovieManager() {
+        movieQty = 10;
+    }
 
     public MovieManager(int movieQty) {
         this.movieQty = movieQty;
     }
 
-    public MovieManager() {
-    }
-
     public void add(Movie item) {
-        Movie tmp[] = new Movie[items.length + 1];
-        for (int i = 0; i < items.length; i++) {
-            tmp[i] = items[i];
-        }
-        tmp[tmp.length - 1] = item;
-        items = tmp;
+        repo.save(item);
     }
 
-    public Movie[] getAll() {
-        return items;
-
+    public Movie[] findAll() {
+        return repo.findAll();
     }
 
-    public Movie[] getLastMovie() {
-        int limit;
-        if (movieQty < items.length) {
-            limit = movieQty;
+    public Movie[] getMovies() {
+        Movie[] all = repo.findAll();
+        Movie[] reversed = new Movie[all.length];
+        for (int i = 0; i < reversed.length; i++) {
+            reversed[i] = all[all.length - 1 - i];
         }
-        else {
-            limit = items.length;
-        }
-        Movie[] result = new Movie[limit];
-        for (int i = 0; i < limit; i++) {
-            result[i] = items[items.length - 1 - i];
-        }
-        return result;
+        return reversed;
     }
 }
