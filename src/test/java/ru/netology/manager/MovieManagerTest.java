@@ -55,8 +55,8 @@ public class MovieManagerTest {
         Assertions.assertArrayEquals(expected,actual);
     }
     @Test
-    public void shouldNoMovie(){
-        MovieManager manager = new MovieManager(10);
+    public void shouldMovieaboveMovieQty(){
+        MovieManager manager = new MovieManager(17);
         Movie[] actual = manager.getLastMovie();
         Movie[] expected = new Movie[]{};
         Assertions.assertArrayEquals(expected, actual);

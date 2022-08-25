@@ -28,13 +28,15 @@ public class MovieManager {
     }
 
     public Movie[] getLastMovie() {
-        int limit = movieQty;
-        if (limit > movieQty) {
+        int limit;
+        if (movieQty < items.length) {
             limit = movieQty;
         }
-        int resultLength = limit < items.length ? limit : items.length;
-        Movie[] result = new Movie[resultLength];
-        for (int i = 0; i < resultLength; i++) {
+        else {
+            limit = items.length;
+        }
+        Movie[] result = new Movie[limit];
+        for (int i = 0; i < limit; i++) {
             result[i] = items[items.length - 1 - i];
         }
         return result;
